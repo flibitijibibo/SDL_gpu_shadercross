@@ -574,14 +574,14 @@ static void *SDL_ShaderCross_INTERNAL_CompileUsingDXC(
 void *SDL_ShaderCross_CompileDXILFromHLSL(
     const SDL_ShaderCross_HLSL_Info *info,
     size_t *size,
-    bool skipRoundTrip)
+    bool skipSPIRVRoundTrip)
 {
     if (info == NULL) {
         SDL_InvalidParamError("info");
         return NULL;
     }
 
-    if (skipRoundTrip) {
+    if (skipSPIRVRoundTrip) {
         return SDL_ShaderCross_INTERNAL_CompileUsingDXC(info, false, size);
     }
 
@@ -629,8 +629,7 @@ void *SDL_ShaderCross_CompileDXILFromHLSL(
 
 void *SDL_ShaderCross_CompileSPIRVFromHLSL(
     const SDL_ShaderCross_HLSL_Info *info,
-    size_t *size,
-    bool skipRoundTrip)
+    size_t *size)
 {
     if (info == NULL) {
         SDL_InvalidParamError("info");
@@ -639,7 +638,7 @@ void *SDL_ShaderCross_CompileSPIRVFromHLSL(
 
     return SDL_ShaderCross_INTERNAL_CompileUsingDXC(
         info,
-        skipRoundTrip,
+        false,
         size);
 }
 
@@ -2161,7 +2160,7 @@ static void *SDL_ShaderCross_INTERNAL_CompileFromSPIRV(
     const SDL_ShaderCross_SPIRV_Info *info,
     SDL_GPUShaderFormat targetFormat,
     SDL_PropertiesID metadataProps,
-    bool skipRoundTrip
+    bool skipSPIRVRoundTrip
 ) {
     spvc_backend backend;
     unsigned shadermodel = 0;
@@ -2238,7 +2237,7 @@ static void *SDL_ShaderCross_INTERNAL_CompileFromSPIRV(
             createInfo.code = SDL_ShaderCross_CompileDXILFromHLSL(
                 &hlslInfo,
                 &createInfo.code_size,
-                skipRoundTrip);
+                skipSPIRVRoundTrip);
         } else { // MSL
             createInfo.code = (const Uint8 *)transpileContext->translated_source;
             createInfo.code_size = SDL_strlen(transpileContext->translated_source) + 1;
@@ -2295,7 +2294,7 @@ static void *SDL_ShaderCross_INTERNAL_CompileFromSPIRV(
             createInfo.code = SDL_ShaderCross_CompileDXILFromHLSL(
                 &hlslInfo,
                 &createInfo.code_size,
-                skipRoundTrip);
+                skipSPIRVRoundTrip);
         } else { // MSL
             createInfo.code = (const Uint8 *)transpileContext->translated_source;
             createInfo.code_size = SDL_strlen(transpileContext->translated_source) + 1;
@@ -2462,7 +2461,7 @@ static void *SDL_ShaderCross_INTERNAL_CreateShaderFromSPIRV(
     const SDL_ShaderCross_SPIRV_Info *info,
     const void *metadata,
     SDL_PropertiesID metadataProps,
-    bool skipRoundTrip)
+    bool skipSPIRVRoundTrip)
 {
     SDL_GPUShaderFormat format;
 
@@ -2553,7 +2552,7 @@ static void *SDL_ShaderCross_INTERNAL_CreateShaderFromSPIRV(
         info,
         format,
         metadataProps,
-        skipRoundTrip);
+        skipSPIRVRoundTrip);
 }
 
 SDL_GPUShader *SDL_ShaderCross_CompileGraphicsShaderFromSPIRV(
@@ -2561,7 +2560,7 @@ SDL_GPUShader *SDL_ShaderCross_CompileGraphicsShaderFromSPIRV(
     const SDL_ShaderCross_SPIRV_Info *info,
     const SDL_ShaderCross_GraphicsShaderResourceInfo *resourceInfo,
     SDL_PropertiesID props,
-    bool skipRoundTrip)
+    bool skipSPIRVRoundTrip)
 {
     if (device == NULL) {
         SDL_InvalidParamError("device");
@@ -2583,7 +2582,7 @@ SDL_GPUShader *SDL_ShaderCross_CompileGraphicsShaderFromSPIRV(
         info,
         (void*) resourceInfo,
         props,
-        skipRoundTrip);
+        skipSPIRVRoundTrip);
 }
 
 SDL_GPUComputePipeline *SDL_ShaderCross_CompileComputePipelineFromSPIRV(
@@ -2591,7 +2590,7 @@ SDL_GPUComputePipeline *SDL_ShaderCross_CompileComputePipelineFromSPIRV(
     const SDL_ShaderCross_SPIRV_Info *info,
     const SDL_ShaderCross_ComputePipelineMetadata *metadata,
     SDL_PropertiesID props,
-    bool skipRoundTrip)
+    bool skipSPIRVRoundTrip)
 {
     if (device == NULL) {
         SDL_InvalidParamError("device");
@@ -2613,7 +2612,7 @@ SDL_GPUComputePipeline *SDL_ShaderCross_CompileComputePipelineFromSPIRV(
         info,
         (void*) metadata,
         props,
-        skipRoundTrip);
+        skipSPIRVRoundTrip);
 }
 
 bool SDL_ShaderCross_Init(void)

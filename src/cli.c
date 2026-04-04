@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
     char *mslVersion = NULL;
 
     bool psslCompat = false;
-    bool skipRoundTrip = false;
+    bool skipSPIRVRoundTrip = false;
 
 #ifdef LEAKCHECK
     SDLTest_TrackAllocations();
@@ -391,7 +391,7 @@ int main(int argc, char *argv[])
             } else if (SDL_strcmp(arg, "--") == 0) {
                 accept_optionals = false;
             } else if (SDL_strcmp(arg, "-srt") == 0 || SDL_strcmp(arg, "--skip-round-trip") == 0) {
-                skipRoundTrip = true;
+                skipSPIRVRoundTrip = true;
             } else {
                 SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s: Unknown argument: %s", argv[0], arg);
                 print_help();
@@ -646,7 +646,7 @@ int main(int argc, char *argv[])
                 Uint8 *buffer = SDL_ShaderCross_CompileDXILFromHLSL(
                     &hlslInfo,
                     &bytecodeSize,
-                    skipRoundTrip);
+                    skipSPIRVRoundTrip);
                 if (buffer == NULL) {
                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to compile DXIL from HLSL: %s", SDL_GetError());
                     result = 1;
@@ -662,7 +662,7 @@ int main(int argc, char *argv[])
                 void *spirv = SDL_ShaderCross_CompileSPIRVFromHLSL(
                     &hlslInfo,
                     &bytecodeSize,
-                    skipRoundTrip);
+                    skipSPIRVRoundTrip);
                 if (spirv == NULL) {
                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to transpile MSL from HLSL: %s", SDL_GetError());
                     result = 1;
@@ -704,7 +704,7 @@ int main(int argc, char *argv[])
                 Uint8 *buffer = SDL_ShaderCross_CompileSPIRVFromHLSL(
                     &hlslInfo,
                     &bytecodeSize,
-                    skipRoundTrip);
+                    skipSPIRVRoundTrip);
                 if (buffer == NULL) {
                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to compile SPIR-V From HLSL: %s", SDL_GetError());
                     result = 1;
@@ -719,7 +719,7 @@ int main(int argc, char *argv[])
                 void *spirv = SDL_ShaderCross_CompileSPIRVFromHLSL(
                     &hlslInfo,
                     &bytecodeSize,
-                    skipRoundTrip);
+                    skipSPIRVRoundTrip);
 
                 if (spirv == NULL) {
                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to compile HLSL to SPIRV: %s", SDL_GetError());
