@@ -56,7 +56,6 @@ void print_help(void)
     SDL_Log("  %-*s %s", column_width, "-c | --cull", "Allow the compiler to cull unused resource bindings. This may lead to surprising binding behavior so be careful when enabling this!");
     SDL_Log("  %-*s %s", column_width, "-g | --debug", "Generate debug information when possible. Shaders are valid only when graphics debuggers are attached.");
     SDL_Log("  %-*s %s", column_width, "-p | --pssl", "Generate PSSL-compatible shader. Destination format should be HLSL.");
-    SDL_Log("  %-*s %s", column_width, "-srt | --skip-round-trip", "If not omitted, SPIR-V roundtrip will be skipped.");
 }
 
 static const char* io_var_type_to_string(SDL_ShaderCross_IOVarType io_var_type, Uint32 vector_size)
@@ -248,7 +247,6 @@ int main(int argc, char *argv[])
     char *mslVersion = NULL;
 
     bool psslCompat = false;
-    bool skipRoundTrip = false;
 
 #ifdef LEAKCHECK
     SDLTest_TrackAllocations();
@@ -390,8 +388,6 @@ int main(int argc, char *argv[])
                 psslCompat = true;
             } else if (SDL_strcmp(arg, "--") == 0) {
                 accept_optionals = false;
-            } else if (SDL_strcmp(arg, "-srt") == 0 || SDL_strcmp(arg, "--skip-round-trip") == 0) {
-                skipRoundTrip = true;
             } else {
                 SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s: Unknown argument: %s", argv[0], arg);
                 print_help();
@@ -645,8 +641,7 @@ int main(int argc, char *argv[])
             case SHADERFORMAT_DXIL: {
                 Uint8 *buffer = SDL_ShaderCross_CompileDXILFromHLSL(
                     &hlslInfo,
-                    &bytecodeSize,
-                    skipRoundTrip);
+                    &bytecodeSize);
                 if (buffer == NULL) {
                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to compile DXIL from HLSL: %s", SDL_GetError());
                     result = 1;
@@ -661,8 +656,7 @@ int main(int argc, char *argv[])
             case SHADERFORMAT_MSL: {
                 void *spirv = SDL_ShaderCross_CompileSPIRVFromHLSL(
                     &hlslInfo,
-                    &bytecodeSize,
-                    skipRoundTrip);
+                    &bytecodeSize);
                 if (spirv == NULL) {
                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to transpile MSL from HLSL: %s", SDL_GetError());
                     result = 1;
@@ -703,8 +697,7 @@ int main(int argc, char *argv[])
             case SHADERFORMAT_SPIRV: {
                 Uint8 *buffer = SDL_ShaderCross_CompileSPIRVFromHLSL(
                     &hlslInfo,
-                    &bytecodeSize,
-                    skipRoundTrip);
+                    &bytecodeSize);
                 if (buffer == NULL) {
                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to compile SPIR-V From HLSL: %s", SDL_GetError());
                     result = 1;
@@ -718,8 +711,7 @@ int main(int argc, char *argv[])
             case SHADERFORMAT_HLSL: {
                 void *spirv = SDL_ShaderCross_CompileSPIRVFromHLSL(
                     &hlslInfo,
-                    &bytecodeSize,
-                    skipRoundTrip);
+                    &bytecodeSize);
 
                 if (spirv == NULL) {
                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to compile HLSL to SPIRV: %s", SDL_GetError());
@@ -764,8 +756,7 @@ int main(int argc, char *argv[])
             case SHADERFORMAT_JSON: {
                 void *spirv = SDL_ShaderCross_CompileSPIRVFromHLSL(
                     &hlslInfo,
-                    &bytecodeSize,
-                    skipRoundTrip);
+                    &bytecodeSize);
 
                 if (spirv == NULL) {
                     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to compile HLSL to SPIRV: %s", SDL_GetError());
