@@ -593,7 +593,7 @@ void *SDL_ShaderCross_CompileDXILFromHLSL(
     void *spirv = SDL_ShaderCross_CompileSPIRVFromHLSL(
         info,
         &spirvSize,
-        skipRoundTrip);
+        false);
 
     if (spirv == NULL) {
         return NULL;
