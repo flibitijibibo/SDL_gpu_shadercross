@@ -57,10 +57,6 @@ sdl_calculate_derived_version_variables(${MAJOR_VERSION} ${MINOR_VERSION} ${MICR
 SDL_DetectTargetCPUArchitectures(SDL_CPU_NAMES)
 SDL_DetectCMakePlatform()
 
-if(SDLSHADERCROSS_SPIRV_ROUNDTRIP)
-    add_definitions(-DSDLSHADERCROSS_SPIRV_ROUNDTRIP)
-endif()
-
 if(SDLSHADERCROSS_INSTALL)
 	include(GNUInstallDirs)
 endif()
@@ -251,6 +247,10 @@ foreach(target IN LISTS SDL3_shadercross_targets)
 	if(SDLSHADERCROSS_DXC)
 		add_compile_definitions(SDL_SHADERCROSS_DXC)
 	endif()
+
+	target_compile_definitions(${target} PRIVATE
+		SDLSHADERCROSS_SPIRV_ROUNDTRIP=$<BOOL:${SDLSHADERCROSS_SPIRV_ROUNDTRIP}>
+	)
 
 	if(SDLSHADERCROSS_SPIRVCROSS_SHARED)
 		target_link_libraries(${target} PRIVATE spirv-cross-c-shared)
