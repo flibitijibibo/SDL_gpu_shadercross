@@ -848,6 +848,7 @@ void *SDL_ShaderCross_CompileDXBCFromHLSL(
         info,
         false,
         size);
+#endif
 }
 
 #include <spirv_cross_c.h>
