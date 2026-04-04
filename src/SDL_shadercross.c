@@ -573,11 +573,16 @@ static void *SDL_ShaderCross_INTERNAL_CompileUsingDXC(
 
 void *SDL_ShaderCross_CompileDXILFromHLSL(
     const SDL_ShaderCross_HLSL_Info *info,
-    size_t *size)
+    size_t *size,
+    bool skipRoundTrip)
 {
     if (info == NULL) {
         SDL_InvalidParamError("info");
         return NULL;
+    }
+
+    if (skipRoundTrip) {
+        return SDL_ShaderCross_INTERNAL_CompileUsingDXC(info, false, size);
     }
 
 #if SDL_PLATFORM_GDK
@@ -587,7 +592,8 @@ void *SDL_ShaderCross_CompileDXILFromHLSL(
     size_t spirvSize;
     void *spirv = SDL_ShaderCross_CompileSPIRVFromHLSL(
         info,
-        &spirvSize);
+        &spirvSize,
+        skipRoundTrip);
 
     if (spirv == NULL) {
         return NULL;
@@ -623,7 +629,8 @@ void *SDL_ShaderCross_CompileDXILFromHLSL(
 
 void *SDL_ShaderCross_CompileSPIRVFromHLSL(
     const SDL_ShaderCross_HLSL_Info *info,
-    size_t *size)
+    size_t *size,
+    bool skipRoundTrip)
 {
     if (info == NULL) {
         SDL_InvalidParamError("info");
@@ -632,7 +639,7 @@ void *SDL_ShaderCross_CompileSPIRVFromHLSL(
 
     return SDL_ShaderCross_INTERNAL_CompileUsingDXC(
         info,
-        true,
+        skipRoundTrip,
         size);
 }
 
@@ -2153,7 +2160,8 @@ static void *SDL_ShaderCross_INTERNAL_CompileFromSPIRV(
     SDL_GPUDevice *device,
     const SDL_ShaderCross_SPIRV_Info *info,
     SDL_GPUShaderFormat targetFormat,
-    SDL_PropertiesID metadataProps
+    SDL_PropertiesID metadataProps,
+    bool skipRoundTrip
 ) {
     spvc_backend backend;
     unsigned shadermodel = 0;
@@ -2229,7 +2237,8 @@ static void *SDL_ShaderCross_INTERNAL_CompileFromSPIRV(
         } else if (targetFormat == SDL_GPU_SHADERFORMAT_DXIL) {
             createInfo.code = SDL_ShaderCross_CompileDXILFromHLSL(
                 &hlslInfo,
-                &createInfo.code_size);
+                &createInfo.code_size,
+                skipRoundTrip);
         } else { // MSL
             createInfo.code = (const Uint8 *)transpileContext->translated_source;
             createInfo.code_size = SDL_strlen(transpileContext->translated_source) + 1;
@@ -2285,7 +2294,8 @@ static void *SDL_ShaderCross_INTERNAL_CompileFromSPIRV(
         } else if (targetFormat == SDL_GPU_SHADERFORMAT_DXIL) {
             createInfo.code = SDL_ShaderCross_CompileDXILFromHLSL(
                 &hlslInfo,
-                &createInfo.code_size);
+                &createInfo.code_size,
+                skipRoundTrip);
         } else { // MSL
             createInfo.code = (const Uint8 *)transpileContext->translated_source;
             createInfo.code_size = SDL_strlen(transpileContext->translated_source) + 1;
@@ -2451,7 +2461,8 @@ static void *SDL_ShaderCross_INTERNAL_CreateShaderFromSPIRV(
     SDL_GPUDevice *device,
     const SDL_ShaderCross_SPIRV_Info *info,
     const void *metadata,
-    SDL_PropertiesID metadataProps)
+    SDL_PropertiesID metadataProps,
+    bool skipRoundTrip)
 {
     SDL_GPUShaderFormat format;
 
@@ -2541,14 +2552,16 @@ static void *SDL_ShaderCross_INTERNAL_CreateShaderFromSPIRV(
         device,
         info,
         format,
-        metadataProps);
+        metadataProps,
+        skipRoundTrip);
 }
 
 SDL_GPUShader *SDL_ShaderCross_CompileGraphicsShaderFromSPIRV(
     SDL_GPUDevice *device,
     const SDL_ShaderCross_SPIRV_Info *info,
     const SDL_ShaderCross_GraphicsShaderResourceInfo *resourceInfo,
-    SDL_PropertiesID props)
+    SDL_PropertiesID props,
+    bool skipRoundTrip)
 {
     if (device == NULL) {
         SDL_InvalidParamError("device");
@@ -2569,14 +2582,16 @@ SDL_GPUShader *SDL_ShaderCross_CompileGraphicsShaderFromSPIRV(
         device,
         info,
         (void*) resourceInfo,
-        props);
+        props,
+        skipRoundTrip);
 }
 
 SDL_GPUComputePipeline *SDL_ShaderCross_CompileComputePipelineFromSPIRV(
     SDL_GPUDevice *device,
     const SDL_ShaderCross_SPIRV_Info *info,
     const SDL_ShaderCross_ComputePipelineMetadata *metadata,
-    SDL_PropertiesID props)
+    SDL_PropertiesID props,
+    bool skipRoundTrip)
 {
     if (device == NULL) {
         SDL_InvalidParamError("device");
@@ -2597,7 +2612,8 @@ SDL_GPUComputePipeline *SDL_ShaderCross_CompileComputePipelineFromSPIRV(
         device,
         info,
         (void*) metadata,
-        props);
+        props,
+        skipRoundTrip);
 }
 
 bool SDL_ShaderCross_Init(void)
