@@ -40,6 +40,7 @@ option(SDLSHADERCROSS_SHARED "Build shared SDL_shadercross library" ${SDLSHADERC
 option(SDLSHADERCROSS_STATIC "Build static SDL_shadercross library" ${SDLSHADERCROSS_STATIC_DEFAULT})
 option(SDLSHADERCROSS_SPIRVCROSS_SHARED "Link to shared library variants of dependencies" ON)
 option(SDLSHADERCROSS_VENDORED "Use vendored dependencies" OFF)
+option(SDLSHADERCROSS_SPIRV_ROUNDTRIP "Roundtrip to SPIR-V for structured buffer support" ON)
 option(SDLSHADERCROSS_CLI "Build command line executable" ON)
 cmake_dependent_option(SDLSHADERCROSS_CLI_STATIC "Link CLI with static libraries" OFF "SDLSHADERCROSS_CLI;SDLSHADERCROSS_STATIC;TARGET SDL3::SDL3-static" OFF)
 cmake_dependent_option(SDLSHADERCROSS_CLI_LEAKCHECK "Check shadercross for memory leaks" OFF "SDLSHADERCROSS_CLI;TARGET SDL3::SDL3_test" OFF)
@@ -55,6 +56,10 @@ cmake_dependent_option(SDLSHADERCROSS_TESTS_TRACKMEM "Enable memory tracking in 
 sdl_calculate_derived_version_variables(${MAJOR_VERSION} ${MINOR_VERSION} ${MICRO_VERSION})
 SDL_DetectTargetCPUArchitectures(SDL_CPU_NAMES)
 SDL_DetectCMakePlatform()
+
+if(SDLSHADERCROSS_SPIRV_ROUNDTRIP)
+    add_definitions(-DSDLSHADERCROSS_SPIRV_ROUNDTRIP)
+endif()
 
 if(SDLSHADERCROSS_INSTALL)
 	include(GNUInstallDirs)

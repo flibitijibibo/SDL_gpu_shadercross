@@ -580,7 +580,7 @@ void *SDL_ShaderCross_CompileDXILFromHLSL(
         return NULL;
     }
 
-#if SDL_PLATFORM_GDK
+#if SDL_PLATFORM_GDK || !defined(SDLSHADERCROSS_SPIRV_ROUNDTRIP)
     return SDL_ShaderCross_INTERNAL_CompileUsingDXC(info, false, size);
 #else
     // Roundtrip to SPIR-V to support things like Structured Buffers.
@@ -838,9 +838,15 @@ void *SDL_ShaderCross_CompileDXBCFromHLSL(
         return NULL;
     }
 
+#if defined(SDLSHADERCROSS_SPIRV_ROUNDTRIP)
     return SDL_ShaderCross_INTERNAL_CompileDXBCFromHLSL(
         info,
         true,
+        size);
+#else
+    return SDL_ShaderCross_INTERNAL_CompileDXBCFromHLSL(
+        info,
+        false,
         size);
 }
 
