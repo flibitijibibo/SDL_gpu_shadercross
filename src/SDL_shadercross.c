@@ -592,8 +592,7 @@ void *SDL_ShaderCross_CompileDXILFromHLSL(
     size_t spirvSize;
     void *spirv = SDL_ShaderCross_CompileSPIRVFromHLSL(
         info,
-        &spirvSize,
-        false);
+        &spirvSize);
 
     if (spirv == NULL) {
         return NULL;
@@ -837,7 +836,8 @@ void *SDL_ShaderCross_INTERNAL_CompileDXBCFromHLSL(
 // Returns raw byte buffer
 void *SDL_ShaderCross_CompileDXBCFromHLSL(
     const SDL_ShaderCross_HLSL_Info *info,
-    size_t *size) // filled in with number of bytes of returned buffer
+    size_t *size,
+    bool skipSPIRVRoundTrip) // filled in with number of bytes of returned buffer
 {
     if (info == NULL) {
         SDL_InvalidParamError("info");
@@ -846,7 +846,7 @@ void *SDL_ShaderCross_CompileDXBCFromHLSL(
 
     return SDL_ShaderCross_INTERNAL_CompileDXBCFromHLSL(
         info,
-        true,
+        !skipSPIRVRoundTrip, // If we are not skipping SPIRV; this is true (retains original behavior)
         size);
 }
 

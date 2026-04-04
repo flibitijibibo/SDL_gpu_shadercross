@@ -301,7 +301,8 @@ extern SDL_DECLSPEC SDL_GPUShaderFormat SDLCALL SDL_ShaderCross_GetHLSLShaderFor
  */
 extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXBCFromHLSL(
     const SDL_ShaderCross_HLSL_Info *info,
-    size_t *size);
+    size_t *size,
+    bool skipSPIRVRoundTrip);
 
 /**
  * Compile to DXIL bytecode from HLSL code via a SPIRV-Cross round trip.
@@ -322,7 +323,8 @@ extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXBCFromHLSL(
  */
 extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXILFromHLSL(
     const SDL_ShaderCross_HLSL_Info *info,
-    size_t *size);
+    size_t *size,
+    bool skipSPIRVRoundTrip);
 
 /**
  * Compile to SPIRV bytecode from HLSL code.
