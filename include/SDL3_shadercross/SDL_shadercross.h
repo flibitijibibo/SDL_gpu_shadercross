@@ -113,6 +113,7 @@ typedef struct SDL_ShaderCross_SPIRV_Info
 
 #define SDL_SHADERCROSS_PROP_SPIRV_PSSL_COMPATIBILITY_BOOLEAN "SDL_shadercross.spirv.pssl.compatibility"
 #define SDL_SHADERCROSS_PROP_SPIRV_MSL_VERSION_STRING "SDL_shadercross.spirv.msl.version"
+#define SDL_SHADERCROSS_PROP_HLSL_SKIP_SPIRV_ROUNDTRIP_BOOLEAN "SDL_shadercross.hlsl.skip_spirv_roundtrip"
 
 typedef struct SDL_ShaderCross_HLSL_Define
 {
@@ -290,8 +291,9 @@ extern SDL_DECLSPEC SDL_GPUShaderFormat SDLCALL SDL_ShaderCross_GetHLSLShaderFor
  * These are the optional properties that can be used:
  *
  * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_ENABLE_BOOLEAN`: allows debug info to be emitted when relevant. Should only be used with debugging tools like Renderdoc.
- * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_ENABLE_BOOLEAN`: a UTF-8 name to be used with the shader. Relevant for use with debugging tools like Renderdoc.
+ * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_NAME_STRING`: a UTF-8 name to be used with the shader. Relevant for use with debugging tools like Renderdoc.
  * - `SDL_SHADERCROSS_PROP_SHADER_CULL_UNUSED_BINDINGS_BOOLEAN`: When true, indicates that the compiler should not cull unused shader resources. This behavior is disabled by default.
+ * - `SDL_SHADERCROSS_PROP_HLSL_SKIP_SPIRV_ROUNDTRIP_BOOLEAN`: When true, the SPIRV roundtrip is skipped. This behavior is disabled by default.
  *
  * \param info a struct describing the shader to transpile.
  * \param size filled in with the bytecode buffer size.
@@ -313,6 +315,7 @@ extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXBCFromHLSL(
  * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_ENABLE_BOOLEAN`: allows debug info to be emitted when relevant. Should only be used with debugging tools like Renderdoc.
  * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_NAME_STRING`: a UTF-8 name to be used with the shader. Relevant for use with debugging tools like Renderdoc.
  * - `SDL_SHADERCROSS_PROP_SHADER_CULL_UNUSED_BINDINGS_BOOLEAN`: when true, indicates that the compiler should not cull unused shader resources. This behavior is disabled by default.
+ * - `SDL_SHADERCROSS_PROP_HLSL_SKIP_SPIRV_ROUNDTRIP_BOOLEAN`: when true, the SPIRV roundtrip is skipped. This behavior is disabled by default.
  *
  * \param info a struct describing the shader to transpile.
  * \param size filled in with the bytecode buffer size.

@@ -583,6 +583,11 @@ void *SDL_ShaderCross_CompileDXILFromHLSL(
 #if SDL_PLATFORM_GDK
     return SDL_ShaderCross_INTERNAL_CompileUsingDXC(info, false, size);
 #else
+
+    if (SDL_GetBooleanProperty(info->props, SDL_SHADERCROSS_PROP_HLSL_SKIP_SPIRV_ROUNDTRIP_BOOLEAN, false)) {
+        return SDL_ShaderCross_INTERNAL_CompileUsingDXC(info, false, size);
+    }
+
     // Roundtrip to SPIR-V to support things like Structured Buffers.
     size_t spirvSize;
     void *spirv = SDL_ShaderCross_CompileSPIRVFromHLSL(
@@ -840,7 +845,7 @@ void *SDL_ShaderCross_CompileDXBCFromHLSL(
 
     return SDL_ShaderCross_INTERNAL_CompileDXBCFromHLSL(
         info,
-        true,
+        !SDL_GetBooleanProperty(info->props, SDL_SHADERCROSS_PROP_HLSL_SKIP_SPIRV_ROUNDTRIP_BOOLEAN, false),
         size);
 }
 
