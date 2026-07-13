@@ -137,12 +137,14 @@ typedef struct SDL_ShaderCross_HLSL_Info
  *
  * \threadsafety This should only be called once, from a single thread.
  * \returns true on success, false otherwise.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC bool SDLCALL SDL_ShaderCross_Init(void);
 /**
  * De-initializes SDL_shadercross
  *
  * \threadsafety This should only be called once, from a single thread.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC void SDLCALL SDL_ShaderCross_Quit(void);
 
@@ -151,6 +153,7 @@ extern SDL_DECLSPEC void SDLCALL SDL_ShaderCross_Quit(void);
  *
  * \threadsafety It is safe to call this function from any thread.
  * \returns GPU shader formats supported by SPIRV cross-compilation.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC SDL_GPUShaderFormat SDLCALL SDL_ShaderCross_GetSPIRVShaderFormats(void);
 
@@ -165,6 +168,7 @@ extern SDL_DECLSPEC SDL_GPUShaderFormat SDLCALL SDL_ShaderCross_GetSPIRVShaderFo
  *
  * \param info a struct describing the shader to transpile.
  * \returns an SDL_malloc'd string containing MSL code.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_TranspileMSLFromSPIRV(
     const SDL_ShaderCross_SPIRV_Info *info);
@@ -180,6 +184,7 @@ extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_TranspileMSLFromSPIRV(
  *
  * \param info a struct describing the shader to transpile.
  * \returns an SDL_malloc'd string containing HLSL code.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_TranspileHLSLFromSPIRV(
     const SDL_ShaderCross_SPIRV_Info *info);
@@ -192,6 +197,7 @@ extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_TranspileHLSLFromSPIRV(
  * \param info a struct describing the shader to transpile.
  * \param size filled in with the bytecode buffer size.
  * \returns an SDL_malloc'd buffer containing DXBC bytecode.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXBCFromSPIRV(
     const SDL_ShaderCross_SPIRV_Info *info,
@@ -205,6 +211,7 @@ extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXBCFromSPIRV(
  * \param info a struct describing the shader to transpile.
  * \param size filled in with the bytecode buffer size.
  * \returns an SDL_malloc'd buffer containing DXIL bytecode.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXILFromSPIRV(
     const SDL_ShaderCross_SPIRV_Info *info,
@@ -220,6 +227,7 @@ extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXILFromSPIRV(
  * \returns a compiled SDL_GPUShader.
  *
  * \threadsafety It is safe to call this function from any thread.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC SDL_GPUShader * SDLCALL SDL_ShaderCross_CompileGraphicsShaderFromSPIRV(
     SDL_GPUDevice *device,
@@ -237,6 +245,7 @@ extern SDL_DECLSPEC SDL_GPUShader * SDLCALL SDL_ShaderCross_CompileGraphicsShade
  * \returns a compiled SDL_GPUComputePipeline.
  *
  * \threadsafety It is safe to call this function from any thread.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC SDL_GPUComputePipeline * SDLCALL SDL_ShaderCross_CompileComputePipelineFromSPIRV(
     SDL_GPUDevice *device,
@@ -253,6 +262,7 @@ extern SDL_DECLSPEC SDL_GPUComputePipeline * SDLCALL SDL_ShaderCross_CompileComp
  * \returns A metadata struct on success, NULL otherwise. The struct must be free'd when it is no longer needed.
  *
  * \threadsafety It is safe to call this function from any thread.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC SDL_ShaderCross_GraphicsShaderMetadata * SDLCALL SDL_ShaderCross_ReflectGraphicsSPIRV(
     const Uint8 *bytecode,
@@ -268,6 +278,7 @@ extern SDL_DECLSPEC SDL_ShaderCross_GraphicsShaderMetadata * SDLCALL SDL_ShaderC
  * \returns A metadata struct on success, NULL otherwise.
  *
  * \threadsafety It is safe to call this function from any thread.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC SDL_ShaderCross_ComputePipelineMetadata * SDLCALL SDL_ShaderCross_ReflectComputeSPIRV(
     const Uint8 *bytecode,
@@ -280,6 +291,7 @@ extern SDL_DECLSPEC SDL_ShaderCross_ComputePipelineMetadata * SDLCALL SDL_Shader
  * \returns GPU shader formats supported by HLSL cross-compilation.
  *
  * \threadsafety It is safe to call this function from any thread.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC SDL_GPUShaderFormat SDLCALL SDL_ShaderCross_GetHLSLShaderFormats(void);
 
@@ -300,6 +312,7 @@ extern SDL_DECLSPEC SDL_GPUShaderFormat SDLCALL SDL_ShaderCross_GetHLSLShaderFor
  * \returns an SDL_malloc'd buffer containing DXBC bytecode.
  *
  * \threadsafety It is safe to call this function from any thread.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXBCFromHLSL(
     const SDL_ShaderCross_HLSL_Info *info,
@@ -322,6 +335,7 @@ extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXBCFromHLSL(
  * \returns an SDL_malloc'd buffer containing DXIL bytecode.
  *
  * \threadsafety It is safe to call this function from any thread.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXILFromHLSL(
     const SDL_ShaderCross_HLSL_Info *info,
@@ -343,6 +357,7 @@ extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXILFromHLSL(
  * \returns an SDL_malloc'd buffer containing SPIRV bytecode.
  *
  * \threadsafety It is safe to call this function from any thread.
+ * \since This function is available since SDL_shadercross 3.0.0.
  */
 extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileSPIRVFromHLSL(
     const SDL_ShaderCross_HLSL_Info *info,

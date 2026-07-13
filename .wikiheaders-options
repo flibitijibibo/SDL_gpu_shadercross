@@ -1,7 +1,7 @@
 projectfullname = SDL_shadercross
 projectshortname = SDL_shadercross
 incsubdir = include/SDL3_shadercross
-wikisubdir = SDL_shadercross
+wikisubdir = SDL3_shadercross
 apiprefixregex = SDL_ShaderCross_
 mainincludefname = SDL3_shadercross/SDL_shadercross.h
 versionfname = include/SDL3_shadercross/SDL_shadercross.h
