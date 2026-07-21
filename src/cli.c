@@ -53,6 +53,7 @@ void print_help(void)
     SDL_Log("  %-*s %s", column_width, "-D<name>[=<value>]", "HLSL define. Only used with HLSL source. Can be repeated.");
     SDL_Log("  %-*s %s", column_width, "", "If =<value> is omitted the define will be treated as equal to 1.");
     SDL_Log("  %-*s %s", column_width, "--msl-version <value>", "Target MSL version. Only used when transpiling to MSL. The default is 1.2.0.");
+    SDL_Log("  %-*s %s", column_width, "--spv-target-env <value>", "Target SPIR-V environment. Default: \"vulkan1.0\".");
     SDL_Log("  %-*s %s", column_width, "-c | --cull", "Allow the compiler to cull unused resource bindings. This may lead to surprising binding behavior so be careful when enabling this!");
     SDL_Log("  %-*s %s", column_width, "-g | --debug", "Generate debug information when possible. Shaders are valid only when graphics debuggers are attached.");
     SDL_Log("  %-*s %s", column_width, "-p | --pssl", "Generate PSSL-compatible shader. Destination format should be HLSL.");
@@ -245,6 +246,7 @@ int main(int argc, char *argv[])
     bool cullUnusedBindings = false;
     bool enableDebug = false;
     char *mslVersion = NULL;
+    char *spvTargetEnv = NULL;
 
     bool psslCompat = false;
 
@@ -380,9 +382,17 @@ int main(int argc, char *argv[])
                 }
                 i += 1;
                 mslVersion = argv[i];
+            } else if (SDL_strcmp(arg, "--spv-target-env") == 0) {
+                if (i + 1 >= argc) {
+                    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s requires an argument", arg);
+                    print_help();
+                    return 1;
+                }
+                i += 1;
+                spvTargetEnv = argv[i];
             } else if (SDL_strcmp(arg, "-c") == 0 || SDL_strcmp(arg, "--cull") == 0) {
                 cullUnusedBindings = true;
-            }  else if (SDL_strcmp(arg, "-g") == 0 || SDL_strcmp(arg, "--debug") == 0) {
+            } else if (SDL_strcmp(arg, "-g") == 0 || SDL_strcmp(arg, "--debug") == 0) {
                 enableDebug = true;
             } else if (SDL_strcmp(arg, "-p") == 0 || SDL_strcmp(arg, "--pssl") == 0) {
                 psslCompat = true;
@@ -503,6 +513,9 @@ int main(int argc, char *argv[])
         if (mslVersion) {
             SDL_SetStringProperty(spirvInfo.props, SDL_SHADERCROSS_PROP_SPIRV_MSL_VERSION_STRING, mslVersion);
         }
+        if (spvTargetEnv) {
+            SDL_SetStringProperty(spirvInfo.props, SDL_SHADERCROSS_PROP_SPIRV_TARGET_ENV_STRING, spvTargetEnv);
+        }
         if (psslCompat) {
             SDL_SetBooleanProperty(spirvInfo.props, SDL_SHADERCROSS_PROP_SPIRV_PSSL_COMPATIBILITY_BOOLEAN, true);
         }
@@ -622,6 +635,9 @@ int main(int argc, char *argv[])
         if (cullUnusedBindings) {
             SDL_SetBooleanProperty(hlslInfo.props, SDL_SHADERCROSS_PROP_SHADER_CULL_UNUSED_BINDINGS_BOOLEAN, true);
         }
+        if (spvTargetEnv) {
+            SDL_SetStringProperty(hlslInfo.props, SDL_SHADERCROSS_PROP_SPIRV_TARGET_ENV_STRING, spvTargetEnv);
+        }
 
         switch (destinationFormat) {
             case SHADERFORMAT_DXBC: {
@@ -732,6 +748,9 @@ int main(int argc, char *argv[])
                 }
                 if (cullUnusedBindings) {
                     SDL_SetBooleanProperty(spirvInfo.props, SDL_SHADERCROSS_PROP_SHADER_CULL_UNUSED_BINDINGS_BOOLEAN, true);
+                }
+                if (spvTargetEnv) {
+                    SDL_SetStringProperty(spirvInfo.props, SDL_SHADERCROSS_PROP_SPIRV_TARGET_ENV_STRING, spvTargetEnv);
                 }
                 if (psslCompat) {
                     SDL_SetBooleanProperty(spirvInfo.props, SDL_SHADERCROSS_PROP_SPIRV_PSSL_COMPATIBILITY_BOOLEAN, true);

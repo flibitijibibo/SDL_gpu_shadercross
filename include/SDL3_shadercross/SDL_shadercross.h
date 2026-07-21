@@ -113,6 +113,7 @@ typedef struct SDL_ShaderCross_SPIRV_Info
 
 #define SDL_SHADERCROSS_PROP_SPIRV_PSSL_COMPATIBILITY_BOOLEAN "SDL_shadercross.spirv.pssl.compatibility"
 #define SDL_SHADERCROSS_PROP_SPIRV_MSL_VERSION_STRING "SDL_shadercross.spirv.msl.version"
+#define SDL_SHADERCROSS_PROP_SPIRV_TARGET_ENV_STRING "SDL_shadercross.spirv.target_env"
 #define SDL_SHADERCROSS_PROP_HLSL_SKIP_SPIRV_ROUNDTRIP_BOOLEAN "SDL_shadercross.hlsl.skip_spirv_roundtrip"
 
 typedef struct SDL_ShaderCross_HLSL_Define
@@ -293,6 +294,7 @@ extern SDL_DECLSPEC SDL_GPUShaderFormat SDLCALL SDL_ShaderCross_GetHLSLShaderFor
  * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_ENABLE_BOOLEAN`: allows debug info to be emitted when relevant. Should only be used with debugging tools like Renderdoc.
  * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_NAME_STRING`: a UTF-8 name to be used with the shader. Relevant for use with debugging tools like Renderdoc.
  * - `SDL_SHADERCROSS_PROP_SHADER_CULL_UNUSED_BINDINGS_BOOLEAN`: When true, indicates that the compiler should cull unused shader resources. This behavior is disabled by default.
+ * - `SDL_SHADERCROSS_PROP_SPIRV_TARGET_ENV_STRING`: a UTF-8 value to be used as the target environment. Uses "vulkan1.0" by default. Relevant when using wave intrinsics, which require "vulkan1.1".
  * - `SDL_SHADERCROSS_PROP_HLSL_SKIP_SPIRV_ROUNDTRIP_BOOLEAN`: When true, the SPIRV roundtrip is skipped. This behavior is disabled by default. Do not use this property if your shader uses Structured Buffers.
  *
  * \param info a struct describing the shader to transpile.
@@ -315,6 +317,7 @@ extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXBCFromHLSL(
  * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_ENABLE_BOOLEAN`: allows debug info to be emitted when relevant. Should only be used with debugging tools like Renderdoc.
  * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_NAME_STRING`: a UTF-8 name to be used with the shader. Relevant for use with debugging tools like Renderdoc.
  * - `SDL_SHADERCROSS_PROP_SHADER_CULL_UNUSED_BINDINGS_BOOLEAN`: when true, indicates that the compiler should cull unused shader resources. This behavior is disabled by default.
+ * - `SDL_SHADERCROSS_PROP_SPIRV_TARGET_ENV_STRING`: a UTF-8 value to be used as the target environment. Uses "vulkan1.0" by default. Relevant when using wave intrinsics, which require "vulkan1.1".
  * - `SDL_SHADERCROSS_PROP_HLSL_SKIP_SPIRV_ROUNDTRIP_BOOLEAN`: when true, the SPIRV roundtrip is skipped. This behavior is disabled by default. Do not use this property if your shader uses Structured Buffers.
  *
  * \param info a struct describing the shader to transpile.
@@ -337,6 +340,7 @@ extern SDL_DECLSPEC void * SDLCALL SDL_ShaderCross_CompileDXILFromHLSL(
  * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_ENABLE_BOOLEAN`: allows debug info to be emitted when relevant. Should only be used with debugging tools like Renderdoc.
  * - `SDL_SHADERCROSS_PROP_SHADER_DEBUG_NAME_STRING`: a UTF-8 name to be used with the shader. Relevant for use with debugging tools like Renderdoc.
  * - `SDL_SHADERCROSS_PROP_SHADER_CULL_UNUSED_BINDINGS_BOOLEAN`: when true, indicates that the compiler should cull unused shader resources. This behavior is disabled by default.
+ * - `SDL_SHADERCROSS_PROP_SPIRV_TARGET_ENV_STRING`: a UTF-8 value to be used as the target environment. Uses "vulkan1.0" by default. Relevant when using wave intrinsics, which require "vulkan1.1".
  *
  * \param info a struct describing the shader to transpile.
  * \param size filled in with the bytecode buffer size.
