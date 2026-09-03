@@ -44,6 +44,9 @@ typedef void *REFIID;
 /* DXIL via DXC */
 #ifdef SDL_SHADERCROSS_DXC
 
+/* Constants for dxcompiler flags */
+#define MAX_TARGET_ENV_ARG_STRING_LENGTH 128
+
 /* dxcompiler Type Definitions */
 typedef int BOOL;
 typedef void *REFCLSID;
@@ -332,6 +335,7 @@ static void *SDL_ShaderCross_INTERNAL_CompileUsingDXC(
     wchar_t *entryPointUtf16 = NULL;
     size_t includeDirLength = 0;
     wchar_t *includeDirUtf16 = NULL;
+    wchar_t *targetEnvUtf16 = NULL;
     wchar_t *nameUtf16 = NULL;
     wchar_t **defineStringsUtf16 = NULL;
     size_t numDefineStrings = 0;
@@ -453,6 +457,16 @@ static void *SDL_ShaderCross_INTERNAL_CompileUsingDXC(
         }
 
         args[argCount++] = (LPCWSTR)L"-fspv-preserve-interface";
+
+        if (SDL_HasProperty(info->props, SDL_SHADERCROSS_PROP_SPIRV_TARGET_ENV_STRING)) {
+            const char *targetEnvVal = SDL_GetStringProperty(info->props, SDL_SHADERCROSS_PROP_SPIRV_TARGET_ENV_STRING, NULL);
+            char targetEnvArg[MAX_TARGET_ENV_ARG_STRING_LENGTH];
+            SDL_snprintf(targetEnvArg, MAX_TARGET_ENV_ARG_STRING_LENGTH, "-fspv-target-env=%s", targetEnvVal);
+            targetEnvUtf16 = (wchar_t *)SDL_iconv_string("WCHAR_T", "UTF-8", targetEnvArg, SDL_utf8strlen(targetEnvArg) + 1);
+            if (targetEnvUtf16 != NULL) {
+                args[argCount++] = targetEnvUtf16;
+            }
+        }
     }
 
     if (SDL_GetBooleanProperty(info->props, SDL_SHADERCROSS_PROP_SHADER_DEBUG_ENABLE_BOOLEAN, false)) {
@@ -494,6 +508,9 @@ static void *SDL_ShaderCross_INTERNAL_CompileUsingDXC(
     SDL_free(defineStringsUtf16);
     if (includeDirUtf16 != NULL) {
         SDL_free(includeDirUtf16);
+    }
+    if (targetEnvUtf16 != NULL) {
+        SDL_free(targetEnvUtf16);
     }
     if (nameUtf16 != NULL) {
         SDL_free(nameUtf16);
